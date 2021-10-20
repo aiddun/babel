@@ -1,0 +1,25 @@
+{
+    "name": "babel-plugin-proposal-empty-spread",
+    "version": "0.0.1",
+    "description": "Implements the empty spread element proposal",
+    "main": "./lib/index.js",
+    "author": {
+        "name": "Aidan Dunlap",
+        "email": "10292904+aiddun@users.noreply.github.com"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "@babel/helper-plugin-utils": "workspace:^7.14.5",
+        "@babel/helper-skip-transparent-expression-wrappers": "workspace:^7.15.4"
+    },
+    "peerDependencies": {
+        "@babel/core": "^7.0.0-0"
+    },
+    "devDependencies": {
+        "@babel/core": "workspace:*",
+        "@babel/helper-plugin-test-runner": "workspace:*"
+    },
+    "engines": {
+        "node": ">=6.9.0"
+    }
+}

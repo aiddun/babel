@@ -306,11 +306,16 @@ export default class LValParser extends NodeUtils {
   ): SpreadElement {
     const node = this.startNode();
     this.next();
-    node.argument = this.parseMaybeAssignAllowIn(
+    this.state.inDirectSpreadElementScope = true;
+    const argument = this.parseMaybeAssignAllowIn(
       refExpressionErrors,
       undefined,
       refNeedsArrowPos,
     );
+    if (argument.key !== undefined) {
+      node.argument = argument;
+    }
+    this.state.inDirectSpreadElementScope = false;
     return this.finishNode(node, "SpreadElement");
   }
 

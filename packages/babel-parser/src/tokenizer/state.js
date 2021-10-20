@@ -81,6 +81,9 @@ export default class State {
   soloAwait: boolean = false;
   inFSharpPipelineDirectBody: boolean = false;
 
+  // For the empty spread operator
+  inDirectSpreadElementScope: boolean = false;
+
   // Labels in scope.
   labels: Array<{
     kind: ?("loop" | "switch"),

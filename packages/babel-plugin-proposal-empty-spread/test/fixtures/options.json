@@ -1,0 +1,8 @@
+{
+    "plugins": [
+        "proposal-empty-spread"
+    ],
+    "parserOpts": {
+        "allowReturnOutsideFunction": true
+    }
+}

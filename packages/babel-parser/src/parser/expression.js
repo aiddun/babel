@@ -30,6 +30,7 @@ import {
   tokenIsRightAssociative,
   tokenLabelName,
   tokenOperatorPrecedence,
+  tokenCutsOffSpreadExpression,
   tt,
   type TokenType,
 } from "../tokenizer/types";
@@ -968,6 +969,9 @@ export default class ExpressionParser extends LValParser {
     const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
     this.state.inFSharpPipelineDirectBody = false;
 
+    const oldinDirectSpreadElementScope = this.state.inDirectSpreadElementScope;
+    this.state.inDirectSpreadElementScope = false;
+
     while (!this.eat(close)) {
       if (first) {
         first = false;
@@ -1002,6 +1006,7 @@ export default class ExpressionParser extends LValParser {
     }
 
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
+    this.state.inDirectSpreadElementScope = oldinDirectSpreadElementScope;
 
     return elts;
   }
@@ -1193,6 +1198,12 @@ export default class ExpressionParser extends LValParser {
         return this.parsePrivateName();
       }
 
+      case tt.ellipsis: {
+        const node = this.startNode();
+        this.next();
+        return this.finishNode(node, "SpreadElement");
+      }
+
       case tt.moduloAssign:
         if (
           this.getPluginOption("pipelineOperator", "proposal") === "hack" &&
@@ -1257,6 +1268,20 @@ export default class ExpressionParser extends LValParser {
 
       // fall through
       default:
+        if (
+          this.state.inDirectSpreadElementScope &&
+          tokenCutsOffSpreadExpression(type)
+        ) {
+          // Empty spread case - [a ? b : ...]
+          // We are going to implement this in the AST as a SpreadElement with an undefined argument field
+          // However, the chain of parsing to get to this level requires we return a node
+          // Therefore, we'll return a node with an undefined key and filter it out once we get back
+          // We should only be in this case if we're already expecting a spread
+          // This way of implemtnation is subject to change
+          const node = this.startNode();
+          // Do not finish node as we want an undefined key
+          return node;
+        }
         if (tokenIsIdentifier(type)) {
           if (
             this.isContextual(tt._module) &&
@@ -1878,6 +1903,10 @@ export default class ExpressionParser extends LValParser {
     }
     const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
     this.state.inFSharpPipelineDirectBody = false;
+
+    const oldinDirectSpreadElementScope = this.state.inDirectSpreadElementScope;
+    this.state.inDirectSpreadElementScope = false;
+
     const propHash: any = Object.create(null);
     let first = true;
     const node = this.startNode();
@@ -1921,6 +1950,8 @@ export default class ExpressionParser extends LValParser {
     this.next();
 
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
+    this.state.inDirectSpreadElementScope = oldinDirectSpreadElementScope;
+
     let type = "ObjectExpression";
     if (isPattern) {
       type = "ObjectPattern";
@@ -2282,6 +2313,9 @@ export default class ExpressionParser extends LValParser {
       this.expectPlugin("recordAndTuple");
     }
     const oldInFSharpPipelineDirectBody = this.state.inFSharpPipelineDirectBody;
+    const oldinDirectSpreadElementScope = this.state.inDirectSpreadElementScope;
+    this.state.inDirectSpreadElementScope = false;
+
     this.state.inFSharpPipelineDirectBody = false;
     const node = this.startNode();
     this.next();
@@ -2292,6 +2326,8 @@ export default class ExpressionParser extends LValParser {
       node,
     );
     this.state.inFSharpPipelineDirectBody = oldInFSharpPipelineDirectBody;
+    this.state.inDirectSpreadElementScope = oldinDirectSpreadElementScope;
+
     return this.finishNode(
       node,
       isTuple ? "TupleExpression" : "ArrayExpression",

@@ -325,6 +325,15 @@ export const tt: { [name: string]: TokenType } = {
   placeholder: createToken("%%", { startsExpr: true }),
 };
 
+export function tokenCutsOffSpreadExpression(token: TokenType) {
+  return (
+    token == tt.bracketR ||
+    token == tt.comma ||
+    token == tt.braceR ||
+    token == tt.colon
+  );
+}
+
 export function tokenIsIdentifier(token: TokenType): boolean {
   return token >= tt._as && token <= tt.name;
 }

@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`empty symbol should parse 1`] = `
+Node {
+  "comments": Array [],
+  "end": 5,
+  "errors": Array [],
+  "loc": SourceLocation {
+    "end": Position {
+      "column": 5,
+      "line": 1,
+    },
+    "filename": undefined,
+    "identifierName": undefined,
+    "start": Position {
+      "column": 0,
+      "line": 1,
+    },
+  },
+  "program": Node {
+    "body": Array [
+      Node {
+        "end": 5,
+        "expression": Node {
+          "elements": Array [
+            Node {
+              "end": 4,
+              "loc": SourceLocation {
+                "end": Position {
+                  "column": 4,
+                  "line": 1,
+                },
+                "filename": undefined,
+                "identifierName": undefined,
+                "start": Position {
+                  "column": 1,
+                  "line": 1,
+                },
+              },
+              "start": 1,
+              "type": "SpreadElement",
+            },
+          ],
+          "end": 5,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 5,
+              "line": 1,
+            },
+            "filename": undefined,
+            "identifierName": undefined,
+            "start": Position {
+              "column": 0,
+              "line": 1,
+            },
+          },
+          "start": 0,
+          "type": "ArrayExpression",
+        },
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 5,
+            "line": 1,
+          },
+          "filename": undefined,
+          "identifierName": undefined,
+          "start": Position {
+            "column": 0,
+            "line": 1,
+          },
+        },
+        "start": 0,
+        "type": "ExpressionStatement",
+      },
+    ],
+    "directives": Array [],
+    "end": 5,
+    "interpreter": null,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 5,
+        "line": 1,
+      },
+      "filename": undefined,
+      "identifierName": undefined,
+      "start": Position {
+        "column": 0,
+        "line": 1,
+      },
+    },
+    "sourceType": "module",
+    "start": 0,
+    "type": "Program",
+  },
+  "start": 0,
+  "type": "File",
+}
+`;
